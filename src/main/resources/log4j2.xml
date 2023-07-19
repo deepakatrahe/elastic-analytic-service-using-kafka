@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<Configuration status="INFO">
+<Configuration status="warn" name="MyApp" packages="">
     <Properties>
-        <Property name="base-path">./logs</Property>
-        <Property name="log-path">${base-path}/dreamtravel</Property>
+        <property name="log.file.path">${bundle:application:log.file.path}</property>
+        <property name="log.file.path.gz">${bundle:application:log.file.path.gz}</property>
+        <property name="log.file.name">${bundle:application:log.file.name}</property>
+        <property name="log.file.size">${bundle:application:log.file.size}</property>
+        <property name="log.level">${bundle:application:log.level}</property>
     </Properties>
-
     <Appenders>
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss} [%t] %c{1} - %msg%n"/>
-        </Console>
-
-        <RollingFile name="RollingFile" fileName="${log-path}/logs.log"
-                     filePattern="${log-path}/dreamtravel_%d{yyyy-MM-dd-HH}.log.gz">
-            <PatternLayout>
-                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-            </PatternLayout>
+        <RollingFile name="RollingFile"
+                     fileName="${log.file.path}/${log.file.name}.log"
+                     filePattern="${log.file.path.gz}/${date:yyyy-MM-dd}/${log.file.name}_%d{yyyy-MM-dd-HH}.log.gz">
+            <PatternLayout
+                    pattern="%d [%t] %-5level %logger{36} - %msg%n" />
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <TimeBasedTriggeringPolicy interval="1"
+                                           modulate="true" />
+                <SizeBasedTriggeringPolicy
+                        size="${log.file.size}" />
             </Policies>
         </RollingFile>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
     </Appenders>
-
     <Loggers>
-        <Root level="info" additivity="false">
-            <!-- <AppenderRef ref="console"/>-->
+        <Root level="${log.level}">
+            <AppenderRef ref="RollingFile" />
+            <AppenderRef ref="LogToConsole" />
+
         </Root>
-
-        <Logger name="com.bng.star" level="info">
-            <!-- <AppenderRef ref="console"/> -->
-            <AppenderRef ref="RollingFile"/>
-        </Logger>
     </Loggers>
-
 </Configuration>
