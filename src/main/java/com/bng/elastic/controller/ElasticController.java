@@ -22,6 +22,11 @@ public class ElasticController {
         return "Hello World";
     }
 
+    @GetMapping("/healthcheck")
+    public String healthcheck() {
+        return "Working fine !!";
+    }
+
     @PostMapping(value = "/publish")
     public GenericResponse sendMessageToKafkaTopic(@RequestBody String request, @RequestHeader String guiTopic) {
         GenericResponse response = new GenericResponse();

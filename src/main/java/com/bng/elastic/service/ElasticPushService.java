@@ -24,22 +24,19 @@ public class ElasticPushService {
 
     public GenericResponse sendData(String request,String guiTopic) {
         logger.info("Elastic Push service sendData -  called");
-        System.out.println("sendData -  called");
-        System.out.println("Elastic Request - " + request);
-        System.out.println("Gui Topic - " + guiTopic);
+        logger.info("Elastic Request - " + request);
+        logger.info("Gui Topic - " + guiTopic);
 
-        if(request.startsWith("\"") && request.endsWith("\"")) {
+        if(request.startsWith("\"\"\"") && request.endsWith("\"\"\"")) {
             int len = request.length();
             request = request.substring(1, len-1);
-            System.out.println("Correct Req - " + request);
+            logger.info("Correct Req - " + request);
         }
+        logger.info("Before Decoding - " );
         logger.info("Elastic Request - " + request);
         GenericResponse response=new GenericResponse();
-        System.out.println("Before Decoding - " );
-        logger.info("Before Decoding - " );
         byte[] decodedBytes = Base64.getDecoder().decode(request);
         String decodedString = new String(decodedBytes);
-        System.out.println("Decoded String - " + decodedString);
         logger.info("Decoded String - " + decodedString);
         try {
             kafkaProducer.sendMessage(guiTopic, decodedString);
@@ -50,7 +47,6 @@ public class ElasticPushService {
         }
         catch (ElasticsearchException e) {
             // Handle Elasticsearch exception
-            System.out.println(e);
             logger.info(e);
             response.setStatus("Failed");
             response.setReason(e.toString());
@@ -58,7 +54,6 @@ public class ElasticPushService {
 
         } catch (Exception e1) {
             // Handle other exceptions
-            System.out.println(e1);
             logger.info(e1);
             response.setStatus("Failed");
             response.setReason(e1.toString());

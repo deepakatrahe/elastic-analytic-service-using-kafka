@@ -20,12 +20,11 @@ public class KafkaProducer {
     }
 
     public void sendMessage(String topic, String message) {
-        System.out.println("Kafka Producer - " + message);
         logger.info("Kafka Producer - " + message);
         if (kafkaEnable)
             this.kafkaTemplate.send(topic, message);
         else {
-            System.out.println("Kafka is disabled");
+            logger.info("Kafka is disabled");
         }
 
     }
