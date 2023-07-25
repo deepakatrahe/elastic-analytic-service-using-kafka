@@ -27,7 +27,7 @@ public class ElasticPushService {
         logger.info("Elastic Request - " + request);
         logger.info("Gui Topic - " + guiTopic);
 
-        if(request.startsWith("\"\"\"") && request.endsWith("\"\"\"")) {
+        if(request.startsWith("\"") && request.endsWith("\"")) {
             int len = request.length();
             request = request.substring(1, len-1);
             logger.info("Correct Req - " + request);
